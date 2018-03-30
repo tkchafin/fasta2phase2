@@ -44,7 +44,8 @@ def main():
 				types.append("M")
 			else:
 				types.append("S")
-		posline = " ".join(str(x) for x in positions) + "\n"
+
+		posline = "P " + " ".join(str(x) for x in positions) + "\n"
 		out_fh.write(posline)
 		out_fh.write(str("".join(types)))
 		out_fh.write("\n")
