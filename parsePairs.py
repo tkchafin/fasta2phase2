@@ -71,7 +71,7 @@ def main():
 												ofh.write(out1)
 												ofh.write(out2)
 											else:
-												print("Oh no! Something went wrong with getFullDiplotype()!")
+												print("Oh no! Something went wrong with getFullDiplotype()! My creator was too lazy to implement better error check though, so I don't know what went wrong!")
 										else:
 											print("Warning: Individual %s doesn't seem to be in the FASTA file... Skipping it."%this_ind)
 									else:
