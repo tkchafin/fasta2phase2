@@ -63,7 +63,7 @@ def main():
 								best = chooseDiplotype(assigns, params.minp)
 								if best:
 									if full_seq:
-										if cons_sequences[this_ind]:
+										if this_ind in cons_sequences:
 											full_dip = getFullDiplotype(cons_sequences[this_ind], best, positions)
 											if full_dip:
 												out1 = ">" + this_ind + "_A" + "\n" + full_dip[0] + "\n"
@@ -75,6 +75,7 @@ def main():
 										else:
 											print("Warning: Individual %s doesn't seem to be in the FASTA file... Skipping it."%this_ind)
 									else:
+										#print("PRINTING IND",this_ind)
 										#print best to file 
 										out1 = ">" + this_ind + "_A" + "\n" + best[0] + "\n"
 										out2 = ">" + this_ind + "_B" + "\n" + best[1] + "\n"
@@ -83,7 +84,8 @@ def main():
 								else:
 									print("Warning: No diplotypes of probability >= %s for sample %s"%(params.minp, this_ind))
 								#Then, empty assigns and this_ind variables 
-								this_ind = None 
+								words = line.split()
+								this_ind = words[1] #Set new individual, reset assigned haps 
 								del assigns[:]
 							else:
 								words = line.split()
@@ -94,6 +96,29 @@ def main():
 							#This line must contain data 
 							stuff = line.replace(" ","").split(",")
 							assigns.append(stuff)
+					if this_ind:
+						if len(assigns) > 0:
+							best = chooseDiplotype(assigns, params.minp)
+							if best:
+								if full_seq:
+									if this_ind in cons_sequences:
+										full_dip = getFullDiplotype(cons_sequences[this_ind], best, positions)
+										if full_dip:
+											out1 = ">" + this_ind + "_A" + "\n" + full_dip[0] + "\n"
+											out2 = ">" + this_ind + "_B" + "\n" + full_dip[1] + "\n"
+											ofh.write(out1)
+											ofh.write(out2)
+										else:
+											print("Oh no! Something went wrong with getFullDiplotype()! My creator was too lazy to implement better error check though, so I don't know what went wrong!")
+									else:
+										print("Warning: Individual %s doesn't seem to be in the FASTA file... Skipping it."%this_ind)
+								else:
+									#print("PRINTING IND",this_ind)
+									#print best to file 
+									out1 = ">" + this_ind + "_A" + "\n" + best[0] + "\n"
+									out2 = ">" + this_ind + "_B" + "\n" + best[1] + "\n"
+									ofh.write(out1)
+									ofh.write(out2)
 					ofh.close()
 				except IOError: 
 					print("Could not read file ",pairs)
@@ -160,6 +185,8 @@ def read_fasta(fas):
 def chooseDiplotype(dips, thresh):
 	best = None 
 	current = 0.0
+	if len(dips) == 1:
+		return(dips[0])
 	for dip in dips:
 		if float(dip[2]) >= 0.0:
 			current = float(dip[2])
