@@ -23,6 +23,12 @@ def main():
 		if params.popmap:
 			#print("Parsing popmap file...")
 			pop_assign = parsePopmap(params.popmap)
+			print("Found", len(pop_assign),"samples in popmap")
+		# with open("test.popmap", "w") as f:
+		# 	for key, val in pop_assign.items():
+		# 		line = key + "\t" + val + "\n"
+		# 		f.write(line)
+		# 	f.close()
 			
 		#Make dict of lists representing populations 
 		pops = dict()
@@ -42,8 +48,10 @@ def main():
 					
 		#Grab table contents
 		hapTotals = dict()
+		hapCounts = dict()
 		for hap in pops["TOTAL"]:
 			hapTotals[hap] = dict()
+			hapCounts[hap] = dict()
 		#Now, parse pops to get frequencies 
 		for pop in pops:
 			counts = dict()
@@ -59,6 +67,7 @@ def main():
 				f = float(counts[key])/float(total)
 				print("%s:%s"%(key,("{0:.4f}".format(f))))
 				hapTotals[key][pop] = f
+				hapCounts[key][pop] = counts[key]
 			print()
 			
 		#Write table 
@@ -82,10 +91,36 @@ def main():
 					hapLine = hapLine + "\n"
 					fh.write(hapLine)
 			except IOError: 
-				print("Could not read file ",nex)
+				print("Could not read file ",fh)
 				sys.exit(1)
 			finally:
 				fh.close()
+				
+			#write counts table 
+			with open(params.out2, 'w') as fh:
+				try:
+					popOrder = pops.keys()
+					header = "Haplotype"
+					for p in popOrder:
+						header = header + "\t" + str(p)
+					header = header + "\n"
+					fh.write(header)
+					
+					#Print haplotype line 
+					for hap in hapTotals:
+						hapLine = str(hap)
+						for p in popOrder:
+							if p in hapTotals[hap]:
+								hapLine = hapLine + "\t" + str(hapCounts[hap][p])
+							else:
+								hapLine = hapLine + "\t" + str(0)
+						hapLine = hapLine + "\n"
+						fh.write(hapLine)
+				except IOError: 
+					print("Could not read file ",fh)
+					sys.exit(1)
+				finally:
+					fh.close()
 
 
 
@@ -161,6 +196,7 @@ def parsePopmap(popmap):
 					else:
 						stuff = line.split()
 						ret[stuff[0]] = stuff[1]
+					#print(line)
 				return(ret)
 			except IOError: 
 				print("Could not read file ",popmap)
@@ -187,6 +223,7 @@ class parseArgs():
 		self.out=None
 		self.fasta=None
 		self.dip=False
+		self.out2=None
 
 		#First pass to see if help menu was called
 		for o, a in options:
@@ -218,8 +255,10 @@ class parseArgs():
 
 		if self.out:
 			self.out = self.out + "_freq.tsv"
+			self.out2 = self.out + "_counts.tsv"
 		else:
 			self.out = "out_freq.tsv"
+			self.out2 = "out_counts.tsv"
 
 
 	def display_help(self, message=None):
