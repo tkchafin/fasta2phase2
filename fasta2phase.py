@@ -28,10 +28,6 @@ def main():
 
 		#Print header information to output file
 		out_fh = open(params.out, "w")
-		out_fh.write(str(len(locus)))
-		out_fh.write("\n")
-		out_fh.write(str(len(alignment.conSequence)))
-		out_fh.write("\n")
 
 		print("Calculating variable columns...")
 		#For each variable column, create outputs for positions and types:
@@ -44,6 +40,11 @@ def main():
 				types.append("M")
 			else:
 				types.append("S")
+
+		out_fh.write(str(len(locus)))
+		out_fh.write("\n")
+		out_fh.write(str(len(positions))) #write length of polymorphic alignment only
+		out_fh.write("\n")
 
 		posline = "P " + " ".join(str(x) for x in positions) + "\n"
 		out_fh.write(posline)
@@ -150,8 +151,8 @@ def get_iupac_dip(char):
 		"G"	: ["G","G"],
 		"C"	: ["C","C"],
 		"T"	: ["T","T"],
-		"N"	: ["N","N"],
-		"-"	: ["N","N"],
+		"N"	: ["?","?"],
+		"-"	: ["?","?"],
 		"R"	: ["A","G"],
 		"Y"	: ["C","T"],
 		"S"	: ["G","C"],
@@ -174,8 +175,8 @@ def get_iupac_mult(char):
 		"G"	: ["1","1"],
 		"C"	: ["2","2"],
 		"T"	: ["3","3"],
-		"N"	: ["N","N"],
-		"-"	: ["N","N"],
+		"N"	: ["-1","-1"],
+		"-"	: ["-1","-1"],
 		"R"	: ["0","1"],
 		"Y"	: ["2","3"],
 		"S"	: ["1","2"],
