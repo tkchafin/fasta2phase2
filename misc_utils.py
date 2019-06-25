@@ -3,7 +3,6 @@
 import sys
 import os
 import os.path
-import pandas as pd
 import re
 
 #Function to calculate overlap of two 1D line segments

@@ -137,7 +137,7 @@ class parseArgs():
 
 		print("""
 	Input options:
-		-f,--fasta	: Sequence string to expand (results output to stdout)
+		-f,--fasta	: FASTA file with one consensus sequencer per infividual
 		-o,--out	: Prefix for output file <default = ./out>
 		-h,--help	: Displays help menu""")
 		print()
