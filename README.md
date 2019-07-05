@@ -1,5 +1,5 @@
 # haploTools
-Python scripts to create input files for haplotype reconstruction in Phase, parse outputs, and perform some other manipulations with haplotypes/ diplotypes
+Python scripts to facilitate haplotype phasing, parse outputs of PHASE, and calculate haplotype and/or diplotype frequencies for populations or sample groups.
 
 ### Dependencies
 
