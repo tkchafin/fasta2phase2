@@ -44,6 +44,6 @@ Description: Extracts phased haplotypes from PHASE output, using the '.pairs' fi
   Details on the functions and usage of each individual script can be found below.
   
   ### fasta2phase.py
-  This script converts a FASTA sequence to the .inp input file required by the (PHASE)[http://stephenslab.uchicago.edu/phase/download.html] haplotype phasing software.
+  This script converts a FASTA sequence to the .inp input file required by the [PHASE](http://stephenslab.uchicago.edu/phase/download.html) haplotype phasing software.
   
   
