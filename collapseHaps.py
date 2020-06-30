@@ -46,7 +46,7 @@ def write_dict(f, d):
 	with open(f, 'w') as fh:
 		try:
 			for samp in d.keys():
-				ol = str(samp) + "\t" + str(d[samp])
+				ol = str(samp) + "\t" + str(d[samp]) + "\n"
 				fh.write(ol)
 		except IOError as e:
 			print("Could not read file %s: %s"%(f,e))
